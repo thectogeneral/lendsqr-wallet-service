@@ -1,8 +1,14 @@
-import express, { Express, NextFunction, Request, Response } from "express";
+import express, { Express, Request, Response } from "express";
 import { Logger } from "./utils";
+import { authRoutes } from "./routes";
 
 
 const app: Express = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static("public"));
 
 // test index route
 app.get("/api/", (req: Request, res: Response) => {
@@ -12,5 +18,7 @@ app.get("/api/", (req: Request, res: Response) => {
         success: true,
     });
 });
+
+app.use("/api", authRoutes);
 
 export default app;

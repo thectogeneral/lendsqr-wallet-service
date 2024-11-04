@@ -7,24 +7,28 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "jest --detectOpenHandles",
     "build": "ts-node",
-    "migrate": "knex migrate:latest --knexfile knexfile.ts",
-    "migrate:fresh": "knex migrate:rollback --knexfile knexfile.ts",
-    "seed": "knex seed:run --knexfile knexfile.ts"
+    "migrate": "knex migrate:latest --knexfile knex.ts",
+    "migrate:fresh": "knex migrate:rollback --knexfile knex.ts",
+    "seed": "knex seed:run --knexfile knex.ts"
   },
   "keywords": [],
   "author": "Salem Olorundare",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "knex": "^3.1.0",
-    "mysql2": "^3.11.3"
+    "mysql2": "^3.11.3",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
+    "@types/knex": "^0.16.1",
     "@types/node": "^22.8.7",
     "jest": "^29.7.0",
     "ts-node": "^10.9.2",
