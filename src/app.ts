@@ -4,7 +4,7 @@ import path from "path";
 
 import { ErrorHandler } from "./middleware";
 import { Logger } from "./utils";
-import { authRoutes } from "./routes";
+import { authRoutes, walletRoutes } from "./routes";
 
 
 const app: Express = express();
@@ -37,7 +37,8 @@ app.get("/api/", (req: Request, res: Response) => {
     });
 });
 
-app.use("/api", authRoutes);
+app.use("/", authRoutes);
+app.use("/api", walletRoutes);
 app.use(ErrorHandler);
 
 export default app;

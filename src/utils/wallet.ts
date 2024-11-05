@@ -1,5 +1,6 @@
+import { NextFunction } from "express";
 import { MIN_AMOUNT } from "../../config";
-
+import { AppError } from "./AppError";
 
 export const generateWalletAddress = (): string => {
     const chars =
@@ -16,4 +17,34 @@ export const checkWalletBalance = async (balance: number): Promise<boolean> => {
         return false;
     }
     return true;
+};
+
+export const compareWalletBalanceWithAmount = async (
+    balance: number,
+    amount: number
+): Promise<boolean> => {
+    if (balance < amount) {
+        return false;
+    }
+    return true;
+};
+
+export const isAmountLessThanTwoDollar = (
+    amount: number,
+    next: NextFunction
+): void => {
+    if (amount < 2) {
+        return next(new AppError("Amount must be greater than $1", 400));
+    }
+    return;
+};
+
+export const isAmountLessThanOneDollar = (
+    amount: number,
+    next: NextFunction
+): void => {
+    if (amount < 1) {
+        return next(new AppError("Amount must be greater than $1", 400));
+    }
+    return;
 };

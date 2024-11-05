@@ -1,23 +1,26 @@
-import Logger from "./logger";
+import Logger from "../utils/logger";
+import catchAsync from "./catchAsync";
+import { checkUser } from "./user";
+import { AppError } from "./AppError";
 import {
     generateWalletAddress,
     checkWalletBalance,
+    compareWalletBalanceWithAmount,
 } from "./wallet";
 import { createUserToken } from "./auth";
 import { comparePassword } from "./user";
-import { AppError } from "./AppError";
-import { checkUser } from "./user";
-import catchAsync from "./catchAsync";
-
-
+import { isAmountLessThanTwoDollar, isAmountLessThanOneDollar } from "./wallet";
 
 export {
-    Logger,
     AppError,
+    Logger,
     catchAsync,
+    checkUser,
     generateWalletAddress,
     checkWalletBalance,
-    checkUser,
     createUserToken,
     comparePassword,
+    isAmountLessThanTwoDollar,
+    compareWalletBalanceWithAmount,
+    isAmountLessThanOneDollar,
 };
