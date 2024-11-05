@@ -7,6 +7,8 @@ import {
     Logger,
     checkUser,
     AppError,
+    createUserToken,
+    comparePassword,
     generateWalletAddress,
 } from "../utils";
 
@@ -66,6 +68,40 @@ class AuthController {
         await createWallet((await userData).id, walletAddress, balance);
     }
     
+    async login(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { email, password } = req.body;
+            Logger.success(email);
+
+            const userExists = await findUserByEmail(email);
+            if (!userExists) {
+                return next(new AppError("Invalid Credentials", 401));
+            }
+
+            const validatePassword = await comparePassword(
+                userExists,
+                password
+            );
+            if (!validatePassword) {
+                return next(new AppError("Invalid Credentials", 401));
+            }
+
+            const token = createUserToken(userExists, 200, res);
+            req.user = userExists;
+
+            return res.status(200).json({
+                success: true,
+                data: { token, user: userExists },
+                message: "Login successful",
+            });
+        } catch (error: unknown) {
+            Logger.error("An error occured: " + error);
+            return res.json({
+                success: false,
+                message: error,
+            });
+        }
+    }
 }
 
 export default new AuthController();
