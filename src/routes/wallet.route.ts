@@ -4,6 +4,7 @@ import { catchAsync } from "../utils";
 import {
     verifyAmount,
     isAuthenticated,
+    verifyFundTransferDetails,
 } from "../middleware";
 
 const walletRoutes = express.Router();
@@ -14,5 +15,13 @@ walletRoutes.post(
     verifyAmount,
     catchAsync(WalletController.fundAuthUserWallet)
 );
+
+walletRoutes.post(
+    "/transfer-funds",
+    isAuthenticated,
+    verifyFundTransferDetails,
+    catchAsync(WalletController.transferFundsToAnotherUser)
+);
+
 
 export default walletRoutes;
