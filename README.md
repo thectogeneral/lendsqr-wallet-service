@@ -1,0 +1,1 @@
+This module provides wallet and transaction management functionality in an Express.js application using TypeScript. It includes features for creating users, managing wallets, and transferring funds between users. It connects to a relational database via Knex, ensuring efficient and transactional handling of balances.
