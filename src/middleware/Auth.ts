@@ -54,4 +54,5 @@ const isAuthenticated = catchAsync(
         return next();
     }
 );
+
 export default isAuthenticated;

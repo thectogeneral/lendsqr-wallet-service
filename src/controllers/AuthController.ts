@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 
 import { createUser, createWallet, findUserByEmail } from "../models";
+import { checkUserBlacklistStatus } from "../utils/user";
 
 import {
     Logger,
@@ -25,6 +26,16 @@ class AuthController {
             const email = req.body.email;
             const password = req.body.password;
             const passwordConfirmation = req.body.passwordConfirmation;
+
+            const blacklist = await checkUserBlacklistStatus(email)
+
+            if (blacklist.data) {
+                Logger.warn("User has been blacklisted");
+                return res.status(409).json({
+                    success: false,
+                    message: "User has been blacklister. Please use another",
+                });
+            }
 
             const userExists = await checkUser(email);
             if (userExists) {

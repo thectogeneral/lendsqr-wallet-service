@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult, ValidationChain } from "express-validator";
+import { validationResult, ValidationChain, ValidationError } from "express-validator";
 import { HttpException } from "../../commons";
 
 const validate = async (
@@ -9,21 +9,25 @@ const validate = async (
     next: NextFunction
 ) => {
     await Promise.all(validations.map((validation) => validation.run(req)));
-    const errorFormatter = ({ location, msg, param, value, nestedErrors }) => {
-        return msg;
-    };
+
+    const errorFormatter = (error: ValidationError) => error.msg; // Only extract the message
+
     const errors = validationResult(req).formatWith(errorFormatter);
     if (errors.isEmpty()) {
         return next();
     }
-    let firstError = errors.mapped()[Object.keys(errors.mapped())[0]],
-        remainingErrors = Object.keys(errors.mapped()).length - 1;
+
+    const errorMap = errors.mapped();
+    const firstError = errorMap[Object.keys(errorMap)[0]];
+    const remainingErrors = Object.keys(errorMap).length - 1;
+
     return next(
         new HttpException(
-            `${firstError}.${remainingErrors ? " (and more errors(s))" : ""}`,
+            `${firstError}. ${remainingErrors ? "(and more errors)" : ""}`,
             422,
-            errors.mapped()
+            errorMap
         )
     );
 };
+
 export default validate;

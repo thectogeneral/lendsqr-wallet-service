@@ -107,6 +107,42 @@ class WalletController {
         }
     }
 
+    async withdrawFunds(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { amount } = req.body;
+            const { id } = req.user[0];
+
+            const wallet = await findUserWallet(id, next);
+
+            isAmountLessThanOneDollar(amount, next);
+
+            const sufficientFunds = await compareWalletBalanceWithAmount(
+                wallet?.balance!,
+                amount
+            );
+            if (!sufficientFunds) {
+                return next(new AppError("Insufficient Funds", 400));
+            }
+
+            let updateType = "deduct";
+            const newBalance = await updateWalletBalance(
+                wallet!,
+                amount,
+                updateType
+            );
+
+            return res.status(200).json({
+                success: true,
+                message: `Debit Amount: $${amount}. Your new balance is $${newBalance}`,
+            });
+        } catch (error: unknown) {
+            Logger.error("An error occured: " + error);
+            return res.json({
+                success: false,
+                errors: error,
+            });
+        }
+    }
 }
 
 export default new WalletController();

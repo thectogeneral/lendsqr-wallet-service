@@ -1,5 +1,5 @@
 import { ErrorHandler } from "./ErrorHandler";
-import ValidateCreateUserRequest from "./validators/creatUserValidator";
+import ValidateCreateUserRequest from "./validators/createUserValidator";
 import ValidateLoginRequest from "./validators/loginValidator";
 import isAuthenticated from "./Auth";
 import {
