@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "ts-node --transpile-only src/index.ts",
     "test": "jest --detectOpenHandles",
     "build": "ts-node",
     "migrate": "knex migrate:latest --knexfile knex.ts",

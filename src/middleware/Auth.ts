@@ -6,6 +6,12 @@ import jwt, { JsonWebTokenError } from "jsonwebtoken";
 import { createKnexConnection, JWT_SECRET } from "../../config";
 import { AppError, catchAsync, Logger } from "../utils";
 
+declare module "express-serve-static-core" {
+    interface Request {
+        user?: any;
+    }
+}
+
 const jwt_key: string = JWT_SECRET;
 const isAuthenticated = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
