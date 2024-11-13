@@ -1,0 +1,48 @@
+services:
+  # MySQL database service
+  mysql:
+    image: mysql:5.7
+    platform: linux/amd64
+    container_name: my_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}  
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysql", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  # Node.js application service
+  app:
+    build: .
+    container_name: lendsqr_app
+    ports:
+      - "3000:3000"
+    environment:
+      APP_PORT: ${APP_PORT}
+      NODE_ENV: ${NODE_ENV}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_CLIENT: ${DB_CLIENT}
+      API_BASE_URL: ${API_BASE_URL}
+      API_KEY: ${API_KEY}
+      APP_ID: ${APP_ID}
+      FRONT_END_URL: ${FRONT_END_URL}
+    depends_on:
+      - mysql
+    command: ["sh", "-c", "./wait-for-it.sh mysql:3306 -- npm run migrate && npm start"]
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh 
+
+# Volumes for persistent storage
+volumes:
+  mysql_data:

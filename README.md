@@ -38,6 +38,9 @@ npm install
 3. Set up environment variable
 
 ```plaintext
+MYSQL_ROOT_PASSWORD=
+MYSQL_DATABASE=
+
 APP_PORT=
 NODE_ENV=
 DB_HOST=
@@ -129,3 +132,7 @@ Request:
   "password": "SecurePassword123"
 }
 ```
+
+## Database model diagram
+
+![DB Diagram](public/ER-diagram.png)
