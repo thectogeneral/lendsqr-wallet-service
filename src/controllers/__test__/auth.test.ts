@@ -81,7 +81,8 @@ describe("POST api/register", () => {
             expect(response.body.message).toBe("User Already Exist. Please Login");
         });
     });
-    
+
+
     describe(`POST /api/login`, () => {
         beforeEach(() => {
             loginUser.mockClear();
@@ -89,16 +90,32 @@ describe("POST api/register", () => {
         });
     
         test("should return a message when login is successful", async () => {
+            const knex = await createKnexConnection();
+            await knex!("users").insert({
+                first_name: registrationData.first_name,
+                last_name: registrationData.last_name,
+                email: registrationData.email,
+                password: registrationData.password,
+            });
             const response = await request
                 .default(app)
                 .post("/api/login")
                 .set("Accept", "application/json")
                 .send(loginDetails);
+    
             expect(response.status).toBe(200);
+            expect(response.body.success).toBe(true);
             expect(response.body.message).toBe("Login successful");
         });
-    
+
         test("should return a token when login is successful", async () => {
+            const knex = await createKnexConnection();
+            await knex!("users").insert({
+                first_name: registrationData.first_name,
+                last_name: registrationData.last_name,
+                email: registrationData.email,
+                password: registrationData.password,
+            });
             const response = await request
                 .default(app)
                 .post("/api/login")
@@ -108,8 +125,15 @@ describe("POST api/register", () => {
             expect(response.status).toBe(200);
             expect(response.body.data).toHaveProperty("token");
         });
-    
+
         test("should return an error message when login is unsuccessful", async () => {
+            const knex = await createKnexConnection();
+            await knex!("users").insert({
+                first_name: registrationData.first_name,
+                last_name: registrationData.last_name,
+                email: registrationData.email,
+                password: registrationData.password,
+            });
             const response = await request
                 .default(app)
                 .post("/api/login")
@@ -119,5 +143,5 @@ describe("POST api/register", () => {
             expect(response.status).toBe(401);
             expect(response.body.message).toBe("Invalid Credentials");
         });
-    });
+    })
 });

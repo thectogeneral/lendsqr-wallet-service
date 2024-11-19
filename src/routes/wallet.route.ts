@@ -12,7 +12,6 @@ const walletRoutes = express.Router();
 walletRoutes.post(
     "/fund-wallet",
     isAuthenticated,
-    verifyAmount,
     catchAsync(WalletController.fundAuthUserWallet)
 );
 
@@ -29,5 +28,6 @@ walletRoutes.post(
     verifyAmount,
     catchAsync(WalletController.withdrawFunds)
 );
+
 
 export default walletRoutes;

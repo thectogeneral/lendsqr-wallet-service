@@ -47,10 +47,7 @@ class AuthController {
             }
 
             if (password !== passwordConfirmation) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Password does not match",
-                });
+                return next(new AppError("Password does not match", 400));
             }
 
             const hashedPassword = await bcrypt.hash(password, 12);
@@ -88,23 +85,17 @@ class AuthController {
             Logger.success(email);
 
             const userExists = await findUserByEmail(email);
-            if (!userExists) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Invalid Credentials",
-                });
-            }
+            // if (!userExists) {
+            //     return next(new AppError("Could not find user", 401));
+            // }
 
             const validatePassword = await comparePassword(
                 userExists,
                 password
             );
-            if (!validatePassword) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Invalid Credentials",
-                });
-            }
+            // if (!validatePassword) {
+            //     return next(new AppError("Invalid Credentials", 401));
+            // }
 
             const token = createUserToken(userExists, 200, res);
             req.user = userExists;

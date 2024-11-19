@@ -13,6 +13,7 @@ authRoutes.post(
 
 authRoutes.post(
     "/login",
+    ValidateLoginRequest,
     catchAsync(AuthController.login)
 );
 
