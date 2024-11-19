@@ -33,7 +33,7 @@ class AuthController {
                 Logger.warn("User has been blacklisted");
                 return res.status(409).json({
                     success: false,
-                    message: "User has been blacklister. Please use another",
+                    message: "User has been blacklisted. Please use another",
                 });
             }
 
@@ -47,7 +47,10 @@ class AuthController {
             }
 
             if (password !== passwordConfirmation) {
-                return next(new AppError("Password does not match", 400));
+                return res.status(400).json({
+                    success: false,
+                    message: "Password does not match",
+                });
             }
 
             const hashedPassword = await bcrypt.hash(password, 12);
@@ -86,7 +89,10 @@ class AuthController {
 
             const userExists = await findUserByEmail(email);
             if (!userExists) {
-                return next(new AppError("Invalid Credentials", 401));
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid Credentials",
+                });
             }
 
             const validatePassword = await comparePassword(
@@ -94,7 +100,10 @@ class AuthController {
                 password
             );
             if (!validatePassword) {
-                return next(new AppError("Invalid Credentials", 401));
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid Credentials",
+                });
             }
 
             const token = createUserToken(userExists, 200, res);

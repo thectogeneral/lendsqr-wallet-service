@@ -29,18 +29,18 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
 
-// // test index route
-// app.get("/api/", (req: Request, res: Response) => {
-//     Logger.info(req.body);
-//     return res.status(200).json({
-//         message: "You have reached Demo Credit API index page",
-//         success: true,
-//     });
-// });
+// test index route
+app.get("/api/", (req: Request, res: Response) => {
+    Logger.info(req.body);
+    return res.status(200).json({
+        message: "You have reached Demo Credit API index page",
+        success: true,
+    });
+});
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", authRoutes);
+app.use("/api", authRoutes);
 app.use("/api", walletRoutes);
 app.use(ErrorHandler);
 
