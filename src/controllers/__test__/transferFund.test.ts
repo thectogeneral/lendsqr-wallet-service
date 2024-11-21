@@ -21,8 +21,7 @@ const registrationData = {
     passwordConfirmation: "password"
 };
 
-const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mjg0LCJpYXQiOjE3MzIxNDQ2MDYsImV4cCI6MTczMjIzMTAwNn0.kucIPazEEpbCBj8juFTwqf2XhOXmwCFFcMbqmTpytZo";
+const token = process.env.TOKEN
 
 describe("POST /api/transfer-funds", () => {
     beforeEach(() => {

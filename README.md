@@ -50,6 +50,8 @@ DB_PASSWORD=
 DB_NAME=
 DB_CLIENT=
 
+TOKEN=
+
 API_BASE_URL=
 API_KEY=
 APP_ID=
@@ -68,6 +70,14 @@ npm run dev
 ```
 npm run migrate
 ```
+
+6. Run Test
+
+```
+npm run test
+```
+
+Note: Please ensure to use a valid token for the test environment
 
 ## Key Classes and Functions
 
