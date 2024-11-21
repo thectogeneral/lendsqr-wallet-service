@@ -18,7 +18,7 @@ This implementation uses Knex for database operations and TypeScript for type sa
 ### Prerequisites
 
 - Node.js
-- MySQL or other relational database compatible with Knex
+- MySQL(v5.7.38) or other relational database compatible with Knex
 - Environment variables configured (see below)
 
 ### Installation
@@ -135,4 +135,4 @@ Request:
 
 ## Database model diagram
 
-![DB Diagram](public/ER-diagram.png)
+![DB Diagram](public/images/e-r-diagram.png)

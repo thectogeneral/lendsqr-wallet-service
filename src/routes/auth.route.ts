@@ -8,6 +8,7 @@ const authRoutes = express.Router();
 
 authRoutes.post(
     "/register",
+    ValidateCreateUserRequest,
     catchAsync(AuthController.register)
 );
 
