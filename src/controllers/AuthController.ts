@@ -30,7 +30,6 @@ class AuthController {
             const blacklist = await checkUserBlacklistStatus(email)
 
             if (blacklist.data) {
-                Logger.warn("User has been blacklisted");
                 return res.status(409).json({
                     success: false,
                     message: "User has been blacklisted. Please use another",
@@ -39,7 +38,6 @@ class AuthController {
 
             const userExists = await checkUser(email);
             if (userExists) {
-                Logger.warn("User already exist");
                 return res.status(409).json({
                     success: false,
                     message: "User Already Exist. Please Login",
@@ -85,17 +83,25 @@ class AuthController {
             Logger.success(email);
 
             const userExists = await findUserByEmail(email);
-            // if (!userExists) {
-            //     return next(new AppError("Could not find user", 401));
-            // }
+            if (!userExists) {
+                Logger.warn("Could not find user");
+                return res.status(401).json({
+                    success: false,
+                    message: "Could not find user",
+                });
+            }
 
             const validatePassword = await comparePassword(
                 userExists,
                 password
             );
-            // if (!validatePassword) {
-            //     return next(new AppError("Invalid Credentials", 401));
-            // }
+            if (!validatePassword) {
+                Logger.warn(userExists.password);
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid Credentials",
+                });
+            }
 
             const token = createUserToken(userExists, 200, res);
             req.user = userExists;

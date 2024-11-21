@@ -1,34 +1,23 @@
 import request from "supertest";
 import app from "../../app";
-import { createKnexConnection } from "../../../config";
-
-
-jest.setTimeout(10000);
 
 const fundWallet = jest.fn();
 
 const data = {
-    amount: 20,
+    amount: 70,
 };
 
 const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mjg0LCJpYXQiOjE3MzIxNDQ2MDYsImV4cCI6MTczMjIzMTAwNn0.kucIPazEEpbCBj8juFTwqf2XhOXmwCFFcMbqmTpytZo";
 
-describe("POST /api/fund-wallet", () => {
+describe("POST /api/withdraw-funds", () => {
     beforeEach(() => {
         fundWallet.mockClear();
     });
 
-    afterAll(async () => {
-        const knex = await createKnexConnection();
-        if (knex) {
-            await knex.destroy();
-        }
-    })
-
-    test("should fund user wallet and returns a message", async () => {
+    test("should withdraw funds from user's wallet", async () => {
         const response = await request(app)
-            .post("/api/fund-wallet")
+            .post("/api/withdraw-funds")
             .set({
                 Accept: "application/json",
                 Authorization: `Bearer ${token}`,
@@ -36,19 +25,22 @@ describe("POST /api/fund-wallet", () => {
             .send(data);
 
         expect(response.status).toBe(200);
+        expect(response.body.success).toBe(true);
         expect(response.body).toHaveProperty("message");
     });
 
-    test("should return an error if user is does not enter an amount", async () => {
+    test("should not withdraw to selected user account if there is insufficient fund", async () => {
+        
         const response = await request(app)
-            .post("/api/fund-wallet")
+            .post("/api/withdraw-funds")
             .set({
                 Accept: "application/json",
                 Authorization: `Bearer ${token}`,
             })
-            .send(data);
-
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty("message");
+            .send({
+                amount: 100000000000000000
+            });
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Insufficient Funds");
     });
 });

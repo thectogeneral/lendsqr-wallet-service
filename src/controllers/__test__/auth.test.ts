@@ -1,6 +1,8 @@
 import * as request from "supertest";
 import app from "../../app";
 import { createKnexConnection } from "../../../config";
+import bcrypt from "bcryptjs";
+
 
 jest.setTimeout(10000);
 
@@ -39,8 +41,8 @@ describe("POST api/register", () => {
         } finally {
             if (knex) {
             await knex.destroy();
+            }
         }
-    }
     });
 
     afterAll(async () => {
@@ -90,13 +92,11 @@ describe("POST api/register", () => {
         });
     
         test("should return a message when login is successful", async () => {
-            const knex = await createKnexConnection();
-            await knex!("users").insert({
-                first_name: registrationData.first_name,
-                last_name: registrationData.last_name,
-                email: registrationData.email,
-                password: registrationData.password,
-            });
+            await request
+                .default(app)
+                .post("/api/register")
+                .send(registrationData);
+
             const response = await request
                 .default(app)
                 .post("/api/login")
@@ -109,13 +109,11 @@ describe("POST api/register", () => {
         });
 
         test("should return a token when login is successful", async () => {
-            const knex = await createKnexConnection();
-            await knex!("users").insert({
-                first_name: registrationData.first_name,
-                last_name: registrationData.last_name,
-                email: registrationData.email,
-                password: registrationData.password,
-            });
+            await request
+                .default(app)
+                .post("/api/register")
+                .send(registrationData);
+
             const response = await request
                 .default(app)
                 .post("/api/login")
@@ -127,13 +125,11 @@ describe("POST api/register", () => {
         });
 
         test("should return an error message when login is unsuccessful", async () => {
-            const knex = await createKnexConnection();
-            await knex!("users").insert({
-                first_name: registrationData.first_name,
-                last_name: registrationData.last_name,
-                email: registrationData.email,
-                password: registrationData.password,
-            });
+            await request
+                .default(app)
+                .post("/api/register")
+                .send(registrationData);
+
             const response = await request
                 .default(app)
                 .post("/api/login")

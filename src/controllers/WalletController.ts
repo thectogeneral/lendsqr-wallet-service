@@ -33,6 +33,10 @@ class WalletController {
 
             isAmountLessThanTwoDollar(amount, next);
 
+            if (!amount) {
+                return next(new AppError("Could not find amount", 401));
+            }
+
             let updateType = "add";
             const newBalance = await updateWalletBalance(
                 wallet!,
@@ -83,8 +87,12 @@ class WalletController {
                 wallet?.balance!,
                 amount
             );
+            
             if (!sufficientFunds) {
-                return next(new AppError("Insufficient Funds", 400));
+                return res.status(400).json({
+                    success: false,
+                    message: "Insufficient Funds",
+                });
             }
 
             // initiate transaction
@@ -121,7 +129,10 @@ class WalletController {
                 amount
             );
             if (!sufficientFunds) {
-                return next(new AppError("Insufficient Funds", 400));
+                return res.status(400).json({
+                    success: false,
+                    message: "Insufficient Funds",
+                });
             }
 
             let updateType = "deduct";

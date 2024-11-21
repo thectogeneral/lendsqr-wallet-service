@@ -15,13 +15,7 @@ declare module "express-serve-static-core" {
 const jwt_key: string = JWT_SECRET;
 const isAuthenticated = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        // const logInSession: boolean = await req?.session.isLoggedIn;
-
-        // if (!logInSession) {
-        //     return res.redirect("/login");
-        // }
-        // return next();
-
+        
         let token;
         // check if token is set
         if (
